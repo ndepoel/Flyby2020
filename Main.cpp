@@ -7,7 +7,7 @@
 
 static bool		done = false;
 static bool		active = true;
-static bool		keys[256];
+static bool		keys[SDL_NUM_SCANCODES];
 static int		screenwidth = 800;
 static int		screenheight = 600;
 static bool		fullscreen = false;
@@ -122,10 +122,10 @@ void HandleEvent( SDL_Event *event )
 	case SDL_MOUSEMOTION:
 		break;
 	case SDL_KEYDOWN:
-		keys[ event->key.keysym.sym ] = true;
+		keys[ event->key.keysym.scancode ] = true;
 		break;
 	case SDL_KEYUP:
-		keys[ event->key.keysym.sym ] = false;
+		keys[ event->key.keysym.scancode ] = false;
 		break;
 	case SDL_WINDOWEVENT:
 		if (event->window.event == SDL_WINDOWEVENT_RESIZED)
@@ -208,7 +208,7 @@ int main( int argc, char **argv )
 		}
 
 		// Process input (TODO: Create a better system for input handling)
-		if ( keys[SDLK_ESCAPE] )
+		if ( keys[SDL_SCANCODE_ESCAPE] )
 		{
 			done = true;
 		}
@@ -216,47 +216,47 @@ int main( int argc, char **argv )
 		Vector3D forward, right, up;
 		cam.angles.AnglesToAxis( forward, right, up );
 
-		if ( keys['f'] )
+		if ( keys[SDL_SCANCODE_F] )
 		{
-			keys['f'] = false;
+			keys[SDL_SCANCODE_F] = false;
 			hyperdrive = (hyperdrive > 0) ? 0 : 4;
 		}
-		if ( keys['h'] )
+		if ( keys[SDL_SCANCODE_H] )
 		{
-			keys['h'] = false;
+			keys[SDL_SCANCODE_H] = false;
 			hyperdrive = (hyperdrive < 0) ? 0 : -4;
 		}
 
-		if ( keys[SDLK_UP] )
+		if ( keys[SDL_SCANCODE_UP] )
 			cam.angles.x += 100 * frametime;
-		if ( keys[SDLK_DOWN] )
+		if ( keys[SDL_SCANCODE_DOWN] )
 			cam.angles.x -= 100 * frametime;
-		if ( keys[SDLK_LEFT] )
+		if ( keys[SDL_SCANCODE_LEFT] )
 			cam.angles.y += 100 * frametime;
-		if ( keys[SDLK_RIGHT] )
+		if ( keys[SDL_SCANCODE_RIGHT] )
 			cam.angles.y -= 100 * frametime;
-		if ( keys['w'] )
+		if ( keys[SDL_SCANCODE_W] )
 			cam.origin = cam.origin + forward * 360 * frametime;
-		if ( keys['s'] )
+		if ( keys[SDL_SCANCODE_S] )
 			cam.origin = cam.origin - forward * 360 * frametime;
-		if ( keys['a'] )
+		if ( keys[SDL_SCANCODE_A] )
 			cam.origin = cam.origin - right * 360 * frametime;
-		if ( keys['d'] )
+		if ( keys[SDL_SCANCODE_D] )
 			cam.origin = cam.origin + right * 360 * frametime;
-		if ( keys['q'] )
+		if ( keys[SDL_SCANCODE_Q] )
 			cam.origin.y += 360 * frametime;
-		if ( keys['z'] )
+		if ( keys[SDL_SCANCODE_Z] )
 			cam.origin.y -= 360 * frametime;
 
-		if ( keys['='] )
+		if ( keys[SDL_SCANCODE_EQUALS] )
 		{
-			keys['='] = false;
+			keys[SDL_SCANCODE_EQUALS] = false;
 			sdlgamma += 0.1f;
 			SDL_SetGamma( sdlgamma, sdlgamma, sdlgamma );
 		}
-		if ( keys['-'] )
+		if ( keys[SDL_SCANCODE_MINUS] )
 		{
-			keys['-'] = false;
+			keys[SDL_SCANCODE_MINUS] = false;
 			sdlgamma -= 0.1f;
 			SDL_SetGamma( sdlgamma, sdlgamma, sdlgamma );
 		}
