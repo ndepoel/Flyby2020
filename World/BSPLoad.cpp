@@ -33,36 +33,33 @@ static struct
 
 void BSPTree::UploadLightmaps()
 {
-	float gamma = 1.25f;
+	int shift = 2;
 
 	for ( int i = 0; i < numLightmaps; i++ )
 	{
-		// Increase lightmap brightness (gamma)
+		// Increase lightmap brightness by saturating colors that have so-called overbright bits
 		for ( int j = 0; j < 128 * 128; j++ )
 		{
-			float r, g, b;
-			r = (float)lightmaps[i].image[j][0] / 255.0f;
-			g = (float)lightmaps[i].image[j][1] / 255.0f;
-			b = (float)lightmaps[i].image[j][2] / 255.0f;
+			unsigned char *texel = lightmaps[i].image[j];
 
-			r = (float)pow( r, 1.0f / gamma );
-			g = (float)pow( g, 1.0f / gamma );
-			b = (float)pow( b, 1.0f / gamma );
+			unsigned int r, g, b;
+			r = ((unsigned int)texel[0]) << shift;
+			g = ((unsigned int)texel[1]) << shift;
+			b = ((unsigned int)texel[2]) << shift;
 
-			float scale = 1.0f;
-			float tmp;
-			if ( r > 1.0f && ( (tmp = 1.0f/r) < scale ) ) scale = tmp;
-			if ( g > 1.0f && ( (tmp = 1.0f/g) < scale ) ) scale = tmp;
-			if ( b > 1.0f && ( (tmp = 1.0f/b) < scale ) ) scale = tmp;
+			// Normalize by color channel instead of saturating to white
+			if ((r | g | b) > 255)
+			{
+				unsigned int max = r > g ? r : g;
+				max = max > b ? max : b;
+				r = r * 255 / max;
+				g = g * 255 / max;
+				b = b * 255 / max;
+			}
 
-			scale *= 255.0f;
-			r *= scale;
-			g *= scale;
-			b *= scale;
-
-			lightmaps[i].image[j][0] = (char)r;
-			lightmaps[i].image[j][1] = (char)g;
-			lightmaps[i].image[j][2] = (char)b;
+			texel[0] = (unsigned char)r;
+			texel[1] = (unsigned char)g;
+			texel[2] = (unsigned char)b;
 		}
 		hLightmaps[i] = TextureManager::Instance()->UploadTexture( (unsigned *)lightmaps[i].image, 128, 128, 24 );
 	}
