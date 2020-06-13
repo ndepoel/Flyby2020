@@ -14,9 +14,14 @@ static bool		fullscreen = false;
 static char		*programtitle = "Flyby";
 static float	sdlgamma = 1.0f;
 
+static SDL_Window *window;
+static SDL_GLContext glContext;
+
 void KillGLFrame()
 {
 	CloseGL();
+
+	SDL_GL_DeleteContext( glContext );
 
 	SDL_Quit();
 }
@@ -39,6 +44,23 @@ bool SDL_GL_LoadExtensions( const char *glExtensions )
 	return true;
 }
 
+void SDL_GL_SwapBuffers()
+{
+	SDL_GL_SwapWindow( window );
+}
+
+void SDL_SetGamma( float redGamma, float greenGamma, float blueGamma )
+{
+	Uint16 red[256];
+	Uint16 green[256];
+	Uint16 blue[256];
+
+	SDL_CalculateGammaRamp(redGamma, red);
+	SDL_CalculateGammaRamp(greenGamma, green);
+	SDL_CalculateGammaRamp(blueGamma, blue);
+	SDL_SetWindowGammaRamp(window, red, green, blue);
+}
+
 bool CreateGLFrame( char *title, int width, int height, int bpp, bool fullscreen )
 {
 	unsigned int flags;
@@ -48,17 +70,24 @@ bool CreateGLFrame( char *title, int width, int height, int bpp, bool fullscreen
 		printf( "Could not initialize SDL\n" );
 		return false;
 	}
-	SDL_WM_SetCaption( title, "" );
 
-	flags = SDL_OPENGL;
+	flags = SDL_WINDOW_OPENGL;
 	if ( fullscreen )
-		flags |= SDL_FULLSCREEN;
+		flags |= SDL_WINDOW_FULLSCREEN;
 
 	SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE, 24 );
 	SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
-	if ( !SDL_SetVideoMode( width, height, bpp, flags ) )
+	window = SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, flags);
+	if ( !window )
 	{
 		printf( "Could not set video mode\n" );
+		return false;
+	}
+
+	glContext = SDL_GL_CreateContext( window );
+	if (!glContext)
+	{
+		printf( "Could not create OpenGL context\n" );
 		return false;
 	}
 
@@ -84,15 +113,6 @@ void HandleEvent( SDL_Event *event )
 {
 	switch( event->type )
 	{
-	case SDL_ACTIVEEVENT:
-		if ( event->active.state & SDL_APPACTIVE )
-		{
-			if ( event->active.gain )
-				active = true;
-			else
-				active = false;
-		}
-		break;
 	case SDL_SYSWMEVENT:
 		// syscommand (screensaver, monitor power saving mode, etc)
 		break;
@@ -107,8 +127,10 @@ void HandleEvent( SDL_Event *event )
 	case SDL_KEYUP:
 		keys[ event->key.keysym.sym ] = false;
 		break;
-	case SDL_VIDEORESIZE:
-		ResizeGLScene( event->resize.w, event->resize.h );
+	case SDL_WINDOWEVENT:
+		if (event->window.event == SDL_WINDOWEVENT_RESIZED)
+			ResizeGLScene( event->window.data1, event->window.data2 );
+
 		break;
 	}
 }

@@ -78,7 +78,7 @@
       <Culture>0x0413</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;sdl.lib;sdlmain.lib;sdl_image.lib;openal32.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;sdl2.lib;sdl2main.lib;sdl2_image.lib;openal32.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>.\Release/Toolkit.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>SDL\lib;OpenAL\libs;OggVorbis\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -121,7 +121,7 @@
       <Culture>0x0413</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;sdl.lib;sdlmain.lib;sdl_image.lib;openal32.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;sdl2.lib;sdl2main.lib;sdl2_image.lib;openal32.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>.\Debug/Toolkit.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>SDL\lib;OpenAL\libs;OggVorbis\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
