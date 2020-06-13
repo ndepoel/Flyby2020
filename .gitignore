@@ -1,0 +1,7 @@
+Debug/
+Release/
+.svn/
+data/
+*.o
+*.sdf
+.vs/
