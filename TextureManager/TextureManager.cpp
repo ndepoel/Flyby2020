@@ -1,6 +1,6 @@
 #include "../Common.h"
 #include "TextureManager.h"
-#include <SDL/SDL_image.h>
+#include <SDL2/SDL_image.h>
 
 static const char	*glExtensions = NULL;
 static GLuint		boundTexture = 0;

@@ -1,5 +1,5 @@
 #include "Common.h"
-#include <SDL/SDL.h>
+#include <SDL2/SDL.h>
 #include "Game.h"
 #include "SharedVars.h"
 #include "GLCommon.h"

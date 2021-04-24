@@ -1,3 +1,5 @@
+# On any Debian-based Linux system, install the following packages to build:
+# libsdl2-dev libsdl2-image-dev libvorbis-dev libopenal-dev
 OUTDIR = out
 BIN = Flyby
 OBJ = \
@@ -43,7 +45,7 @@ PCH =
 
 CC = g++ -DNO_GLEXT
 INCLUDE = 
-LIB = -lGL -lGLU -lSDL -lSDLmain -lSDL_image -lopenal -logg -lvorbis -lvorbisfile
+LIB = -lGL -lGLU -lSDL2 -lSDL2main -lSDL2_image -lopenal -logg -lvorbis -lvorbisfile
 
 all : $(PCH) $(OBJ)
 	$(CC) -o $(OUTDIR)/$(BIN) $(OBJ) $(LIB)
